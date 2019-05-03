@@ -1,0 +1,119 @@
+//Setup
+const Discord = require('discord.js');
+const client = new Discord.Client();
+client.login('NTU5MzAyNTc3ODk2ODE2NjQx.D3je8A.W_W24kjnw2LpOS90p4AEb2LDbEo')
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('guildMemberAdd', function(member){
+	member.createDM().then(function (channel){
+		return channel.send('Bienvenue ' + member.displayName)
+	}).catch(console.error)
+})
+
+client.on('ready', function(){
+	client.user.setPresence({ game: { name: 't/help' }, status: 'online' })
+  .catch(console.error);
+	}
+)
+
+//Commands
+
+
+client.on('message', message => {
+	if(message.content === 't/s-infos') {
+		message.delete()
+		var embed = new Discord.RichEmbed()
+		.setTitle('Informations consernant: ', message.guild.name)
+		.addField('Proprio: ', message.guild.owner)
+		.addField('Nombre de personnes sur le serveur: ', message.guild.memberCount)
+		.addField('Créer le: ', message.guild.createdAt)
+		.setColor('#DB0B32')
+	message.channel.send(embed)
+	}
+
+	if(message.content === 't/help') {
+		message.delete()
+		var embed = new Discord.RichEmbed()
+		.setTitle('Aide')
+		.addField('help','Affiche cette page', true)
+		.addField('avatar','Affiche votre avatar', true)
+		.addField('s-infos','Informations consernant ce serveur', true)
+		.addField('ban','Banni la personne mantionée', true)
+		.addField('kick','Expulse la personne mantionée', true)
+		.setColor('#8FCF3C')
+	message.channel.send(embed)
+	}
+
+	if (message.content === 't/avatar') {
+  	message.delete()
+    message.reply(message.author.avatarURL);
+  }
+
+  if (!message.guild) return;
+
+  
+  if (message.content.startsWith('t/kick')) {
+    
+    const user = message.mentions.users.first();
+ 
+    if (user) {
+      
+      const member = message.guild.member(user);
+      if (member) {
+        
+        member.kick('Optional reason that will display in the audit logs').then(() => {
+          
+          message.reply(`${user.tag} a été expulser`);
+        }).catch(err => {
+          
+          message.reply('Je n ai pas pu le kick');
+          
+          console.error(err);
+        });
+      } else {
+        
+        message.reply('That user isn\'t in this guild!');
+      }
+ 
+    } else {
+      message.reply('Veuillez mantioner l\'utilisateur a KICK');
+    }
+  }
+
+  if (!message.guild) return;
+
+  
+  if (message.content.startsWith('t/ban')) {
+    
+    const user = message.mentions.users.first();
+    
+    if (user) {
+     
+      const member = message.guild.member(user);
+      
+      if (member) {
+        
+        member.ban({
+          reason: 'Il était méchant',
+        }).then(() => {
+          
+          message.reply(`${user.tag} a été banni`);
+        }).catch(err => {
+          
+          message.reply('Je n\'ai pas reussi a le ban');
+          
+          console.error(err);
+        });
+      } else {
+        
+        message.reply('Cet utilisateur n\'est pas sur votre serveur');
+      }
+    } else {
+   
+      message.reply('Veuillez mantioner l\'utilisateur a BAN');
+    }
+  }
+
+})

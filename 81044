@@ -1,0 +1,14 @@
+{
+  "name": "thbot",
+  "version": "1.0.0",
+  "description": "bot de theo",
+  "main": "index.js",
+  "scripts": {
+    "test": "//test"
+  },
+  "author": "NoName",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.4.2"
+  }
+}
